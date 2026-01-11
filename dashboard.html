@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EMS Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3>🏢 EMS</h3>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="#dashboard" class="active">📊 Dashboard</a></li>
+    <li><a href="attendance.html">📋 Reports</a></li>
+    <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <header>
+    <h2>Employee Management Dashboard</h2>
+    <div class="header-actions">
+      <button onclick="toggleTheme()">🌙 Dark Mode</button>
+      <span>Welcome, <span id="user"></span></span>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Employees</h3>
+        <div class="stat-number" id="total">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Present Today</h3>
+        <div class="stat-number present" id="present">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Absent Today</h3>
+        <div class="stat-number absent" id="absent">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Departments</h3>
+        <div class="stat-number" id="departments">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Avg Salary</h3>
+        <div class="stat-number" id="avgSalary">$0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Attendance Rate</h3>
+        <div class="stat-number" id="attendanceRate">0%</div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-section">
+        <div class="card">
+          <h3>📊 Department Overview</h3>
+          <div id="deptOverview" class="dept-overview">
+            <!-- Department stats will be populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <div class="card">
+          <h3>📈 Recent Activity</h3>
+          <div class="activity-feed">
+            <div class="activity-item">
+              <span class="activity-time">Today</span>
+              <span class="activity-desc">5 employees marked present</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-time">Yesterday</span>
+              <span class="activity-desc">New employee Alice Brown joined</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-time">2 days ago</span>
+              <span class="activity-desc">Department meeting scheduled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="adminPanel" class="card">
+      <h3>➕ Add New Employee</h3>
+      <div class="form-grid">
+        <input id="name" placeholder="Full Name" required>
+        <input id="dept" placeholder="Department" required>
+        <input id="email" type="email" placeholder="Email Address">
+        <input id="phone" placeholder="Phone Number">
+        <input id="position" placeholder="Position" value="Employee">
+        <input id="salary" placeholder="Salary" value="$50,000">
+        <button onclick="addEmployee()">Add Employee</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>👥 Employee Directory</h3>
+        <input id="search" placeholder="🔍 Search employees..." onkeyup="searchEmployee()">
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Salary</th>
+            <th>Attendance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/ems.js"></script>
+</body>
+</html>

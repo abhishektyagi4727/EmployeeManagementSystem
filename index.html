@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EMS Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="center">
+
+<div class="login-box">
+  <div class="login-header">
+    <h2>🏢 EMS</h2>
+    <p>Employee Management System</p>
+  </div>
+  
+  <div class="login-form">
+    <div class="role-selector">
+      <label>Login As:</label>
+      <select id="role" onchange="updateLoginForm()">
+        <option value="admin">👑 Admin</option>
+        <option value="employee">👤 Employee</option>
+      </select>
+    </div>
+
+    <input type="email" id="email" placeholder="📧 Email Address" required>
+    <input type="password" id="password" placeholder="🔐 Password" required>
+    
+    <div id="demoInfo" class="demo-info">
+      <p><strong>Demo Admin:</strong> admin@company.com / password123</p>
+    </div>
+    
+    <button onclick="login()" class="login-btn">🚀 Login</button>
+    
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script>
+// Load theme
+if(localStorage.getItem('theme') === 'dark'){
+  document.body.classList.add('dark');
+}
+
+function updateLoginForm(){
+  const role = document.getElementById('role').value;
+  const email = role === 'admin' ? 'admin@company.com' : 'employee@company.com';
+  const password = 'password123';
+  document.getElementById('email').value = email;
+  document.getElementById('password').value = password;
+}
+</script>
+</body>
+</html>

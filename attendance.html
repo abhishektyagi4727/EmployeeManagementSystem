@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance Report</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3>🏢 EMS</h3>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <li><a href="#reports" class="active">📋 Reports</a></li>
+    <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <header>
+    <h2>Monthly Attendance Report</h2>
+    <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 Attendance Summary</h3>
+        <button onclick="exportCSV()">📥 Export CSV</button>
+      </div>
+
+      <div class="report-stats">
+        <div class="stat-item">
+          <span class="stat-label">Total Employees:</span>
+          <span class="stat-value" id="totalEmps">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Present Today:</span>
+          <span class="stat-value present" id="presentCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Absent Today:</span>
+          <span class="stat-value absent" id="absentCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Attendance Rate:</span>
+          <span class="stat-value" id="attendanceRate">0%</span>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Join Date</th>
+          </tr>
+        </thead>
+        <tbody id="report"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const emps = JSON.parse(localStorage.getItem("employees")) || [];
+const tbody = document.getElementById("report");
+
+document.getElementById("totalEmps").innerText = emps.length;
+const present = emps.filter(e => e.attendance === "Present").length;
+const absent = emps.filter(e => e.attendance === "Absent").length;
+document.getElementById("presentCount").innerText = present;
+document.getElementById("absentCount").innerText = absent;
+document.getElementById("attendanceRate").innerText = emps.length > 0 ? Math.round((present/emps.length)*100) + '%' : '0%';
+
+emps.forEach(e => {
+  tbody.innerHTML += `<tr>
+    <td>${e.id || 'N/A'}</td>
+    <td>${e.name}</td>
+    <td>${e.dept}</td>
+    <td><span class="badge ${e.attendance==='Present'?'present':'absent'}">${e.attendance}</span></td>
+    <td>${e.joinDate || 'N/A'}</td>
+  </tr>`;
+});
+
+function exportCSV() {
+  let csv = "ID,Name,Department,Attendance,Join Date,Email,Phone\n";
+  emps.forEach(e => csv += `${e.id || 'N/A'},${e.name},${e.dept},${e.attendance},${e.joinDate || 'N/A'},${e.email || 'N/A'},${e.phone || 'N/A'}\n`);
+
+  const blob = new Blob([csv]);
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `attendance_report_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+}
+
+function logout(){
+  if(confirm('Are you sure you want to logout?')){
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+}
+
+// Load theme
+if(localStorage.getItem('theme') === 'dark'){
+  document.body.classList.add('dark');
+}
+</script>
+
+</body>
+</html>

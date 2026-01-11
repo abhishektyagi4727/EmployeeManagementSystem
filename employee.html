@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3>🏢 EMS</h3>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <li><a href="attendance.html">📋 Reports</a></li>
+    <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <header>
+    <h2>Employee Profile</h2>
+    <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+  </header>
+
+  <div class="container">
+    <div class="profile-card">
+      <div class="profile-header">
+        <img id="empPhoto" src="https://i.pravatar.cc/120" alt="Profile Picture" class="profile-avatar">
+        <div class="profile-info">
+          <h1 id="empName"></h1>
+          <p class="role" id="empRole">Employee</p>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <div class="detail-section">
+          <h3>📋 Basic Information</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Employee ID:</label>
+              <span id="empId"></span>
+            </div>
+            <div class="detail-item">
+              <label>Department:</label>
+              <span id="empDept"></span>
+            </div>
+            <div class="detail-item">
+              <label>Position:</label>
+              <span id="empPosition"></span>
+            </div>
+            <div class="detail-item">
+              <label>Salary:</label>
+              <span id="empSalary"></span>
+            </div>
+            <div class="detail-item">
+              <label>Email:</label>
+              <span id="empEmail"></span>
+            </div>
+            <div class="detail-item">
+              <label>Phone:</label>
+              <span id="empPhone"></span>
+            </div>
+            <div class="detail-item">
+              <label>Join Date:</label>
+              <span id="empJoinDate"></span>
+            </div>
+            <div class="detail-item">
+              <label>Current Status:</label>
+              <span id="empAttendance" class="badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>📊 Quick Actions</h3>
+          <div class="action-buttons">
+            <button onclick="toggleAttendance()" class="action-btn" id="attendanceBtn">Mark Present</button>
+            <button onclick="editProfile()" class="action-btn edit">Edit Profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const emp = JSON.parse(localStorage.getItem("selectedEmp"));
+if (!emp) {
+  alert("No employee selected. Redirecting to dashboard.");
+  window.location.href = "dashboard.html";
+}
+const employees = JSON.parse(localStorage.getItem('employees')) || [];
+const empIndex = employees.findIndex(e => e.id === emp.id);
+
+document.getElementById("empPhoto").src = emp.photo || 'https://i.pravatar.cc/120';
+document.getElementById("empId").innerText = emp.id;
+document.getElementById("empDept").innerText = emp.dept;
+document.getElementById("empPosition").innerText = emp.position || 'Employee';
+document.getElementById("empSalary").innerText = emp.salary || 'N/A';
+document.getElementById("empEmail").innerText = emp.email;
+document.getElementById("empPhone").innerText = emp.phone || 'N/A';
+document.getElementById("empJoinDate").innerText = emp.joinDate || 'N/A';
+
+const attendanceEl = document.getElementById("empAttendance");
+attendanceEl.innerText = emp.attendance;
+attendanceEl.classList.add(emp.attendance === 'Present' ? 'present' : 'absent');
+
+const attendanceBtn = document.getElementById("attendanceBtn");
+attendanceBtn.innerText = emp.attendance === 'Present' ? 'Mark Absent' : 'Mark Present';
+
+function toggleAttendance(){
+  if(empIndex !== -1){
+    employees[empIndex].attendance = employees[empIndex].attendance === 'Present' ? 'Absent' : 'Present';
+    localStorage.setItem('employees', JSON.stringify(employees));
+    location.reload();
+  }
+}
+
+function editProfile(){
+  const name = prompt('Edit name', emp.name);
+  const dept = prompt('Edit department', emp.dept);
+  const email = prompt('Edit email', emp.email);
+  const phone = prompt('Edit phone', emp.phone);
+  const position = prompt('Edit position', emp.position || 'Employee');
+  const salary = prompt('Edit salary', emp.salary || '$50,000');
+
+  if(name && dept && empIndex !== -1){
+    employees[empIndex].name = name;
+    employees[empIndex].dept = dept;
+    employees[empIndex].email = email || employees[empIndex].email;
+    employees[empIndex].phone = phone || employees[empIndex].phone;
+    employees[empIndex].position = position || employees[empIndex].position;
+    employees[empIndex].salary = salary || employees[empIndex].salary;
+    localStorage.setItem('employees', JSON.stringify(employees));
+    location.reload();
+  }
+}
+
+function logout(){
+  if(confirm('Are you sure you want to logout?')){
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+}
+
+// Load theme
+if(localStorage.getItem('theme') === 'dark'){
+  document.body.classList.add('dark');
+}
+</script>
+
+</body>
+</html>
